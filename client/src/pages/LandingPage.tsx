@@ -42,10 +42,11 @@ export function LandingPage() {
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8">
         {/* Logo and tagline */}
-        <div className="text-center">
-          <Logo className="mx-auto mb-4" size="lg" />
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2">Point Flow</h1>
-          <p className="text-gray-600 dark:text-gray-300 text-lg">Quick Planning Poker for Agile Teams</p>
+        <div className="text-center space-y-3">
+          <Logo variant="full" size="xl" className="mx-auto" />
+          <p className="text-gray-600 dark:text-gray-300 text-lg font-light">
+            Collaborative estimation for agile teams
+          </p>
         </div>
 
         {/* Main actions */}

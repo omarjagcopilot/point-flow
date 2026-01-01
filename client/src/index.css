@@ -2,6 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Logo hover animations */
+@keyframes cardFlip {
+  0% { transform: translateY(50px) scale(0.5); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+@keyframes flowPulse {
+  0%, 100% { stroke-width: 5; }
+  50% { stroke-width: 7; }
+}
+
+.logo-group:hover .team-card {
+  animation: cardFlip 0.4s ease-out forwards;
+  opacity: 1 !important;
+}
+
+.logo-group:hover .team-card:nth-child(6) { animation-delay: 0s; }
+.logo-group:hover .team-card:nth-child(7) { animation-delay: 0.1s; }
+.logo-group:hover .team-card:nth-child(8) { animation-delay: 0.15s; }
+.logo-group:hover .team-card:nth-child(9) { animation-delay: 0.2s; }
+.logo-group:hover .team-card:nth-child(10) { animation-delay: 0.25s; }
+
+.logo-group:hover .center-badge {
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.logo-group:hover .flow-line {
+  animation: flowPulse 1.5s ease-in-out infinite;
+}
+
+.logo-group:hover svg {
+  transform: scale(1.05);
+}
+
 @layer base {
   body {
     @apply bg-gray-50 text-gray-900 antialiased dark:bg-gray-900 dark:text-gray-100;
