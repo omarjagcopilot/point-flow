@@ -17,6 +17,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/create" element={<CreateSessionPage />} />
           <Route path="/setup" element={<SetupStoriesPage />} />
+          <Route path="/setup/:code" element={<SetupStoriesPage />} />
           <Route path="/session/:code" element={<SessionRoomPage />} />
           <Route path="/join" element={<JoinPage />} />
           <Route path="/join/:code" element={<JoinPage />} />

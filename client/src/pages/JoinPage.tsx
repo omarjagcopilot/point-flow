@@ -81,7 +81,7 @@ export function JoinPage() {
         {/* Header */}
         <button
           onClick={() => navigate('/')}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 group"
+          className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 mb-6 group"
         >
           <span className="group-hover:-translate-x-1 transition-transform">←</span>
           <span>Back</span>
@@ -90,11 +90,11 @@ export function JoinPage() {
         <div className="card">
           <div className="flex items-center gap-3 mb-6">
             <Logo size="sm" />
-            <h1 className="text-2xl font-bold text-gray-900">Join Session</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Join Session</h1>
           </div>
 
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+            <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm">
               {error}
             </div>
           )}
@@ -102,7 +102,7 @@ export function JoinPage() {
           <form onSubmit={handleJoin} className="space-y-4">
             {/* Session Code */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Session Code
               </label>
               <input
@@ -118,7 +118,7 @@ export function JoinPage() {
 
             {/* Participant Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Your Name
               </label>
               <input

@@ -15,7 +15,7 @@ export function StoriesList({
 }: StoriesListProps) {
   if (stories.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-500">
+      <div className="text-center py-8 text-gray-500 dark:text-gray-400">
         <div className="text-3xl mb-2">📝</div>
         <p className="text-sm">No stories yet</p>
       </div>
@@ -50,10 +50,10 @@ export function StoriesList({
             key={story.id}
             className={`p-3 rounded-lg border-2 transition-all ${
               isActive
-                ? 'border-primary-500 bg-primary-50'
+                ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/30'
                 : story.status === 'final'
-                ? 'border-green-200 bg-green-50'
-                : 'border-gray-200 bg-white hover:border-gray-300'
+                ? 'border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20'
+                : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'
             }`}
           >
             <div className="flex items-start justify-between gap-2">
@@ -64,14 +64,19 @@ export function StoriesList({
                   ) : isActive ? (
                     <span className="text-primary-500">●</span>
                   ) : (
-                    <span className="text-gray-400">○</span>
+                    <span className="text-gray-400 dark:text-gray-500">○</span>
                   )}
                   <span className={`font-medium truncate ${
-                    story.status === 'final' ? 'text-gray-600' : 'text-gray-900'
+                    story.status === 'final' ? 'text-gray-600 dark:text-gray-400' : 'text-gray-900 dark:text-gray-100'
                   }`}>
                     {index + 1}. {story.title}
                   </span>
                 </div>
+                {story.description && (
+                  <p className="text-sm text-gray-500 dark:text-gray-400 ml-6 mt-1 truncate">
+                    {story.description}
+                  </p>
+                )}
               </div>
               
               <div className="flex items-center gap-2 flex-shrink-0">

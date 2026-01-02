@@ -56,7 +56,7 @@ export function CreateSessionPage() {
         {/* Header */}
         <button
           onClick={() => navigate('/')}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 group"
+          className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 mb-6 group"
         >
           <span className="group-hover:-translate-x-1 transition-transform">←</span>
           <span>Back</span>
@@ -65,11 +65,11 @@ export function CreateSessionPage() {
         <div className="card">
           <div className="flex items-center gap-3 mb-6">
             <Logo size="sm" />
-            <h1 className="text-2xl font-bold text-gray-900">Create New Session</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Create New Session</h1>
           </div>
 
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+            <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm">
               {error}
             </div>
           )}
@@ -77,7 +77,7 @@ export function CreateSessionPage() {
           <form onSubmit={handleCreate} className="space-y-6">
             {/* Session Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Session Name
               </label>
               <input
@@ -92,7 +92,7 @@ export function CreateSessionPage() {
 
             {/* Scrum Master Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Your Name
               </label>
               <input
@@ -107,7 +107,7 @@ export function CreateSessionPage() {
 
             {/* Point Scale */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Point Scale
               </label>
               <div className="space-y-2">
@@ -116,8 +116,8 @@ export function CreateSessionPage() {
                     key={option.value}
                     className={`flex items-start p-3 rounded-lg border-2 cursor-pointer transition-all ${
                       pointScale === option.value
-                        ? 'border-primary-500 bg-primary-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/30'
+                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                     }`}
                   >
                     <input
@@ -129,8 +129,8 @@ export function CreateSessionPage() {
                       className="mt-1 mr-3"
                     />
                     <div>
-                      <div className="font-medium text-gray-900">{option.label}</div>
-                      <div className="text-sm text-gray-500 font-mono">{option.values}</div>
+                      <div className="font-medium text-gray-900 dark:text-gray-100">{option.label}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400 font-mono">{option.values}</div>
                     </div>
                   </label>
                 ))}
@@ -139,7 +139,7 @@ export function CreateSessionPage() {
 
             {/* Session Type */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Session Type
               </label>
               <div className="grid grid-cols-2 gap-3">
@@ -148,26 +148,26 @@ export function CreateSessionPage() {
                   onClick={() => setSessionType('planned')}
                   className={`p-4 rounded-lg border-2 text-left transition-all ${
                     sessionType === 'planned'
-                      ? 'border-primary-500 bg-primary-50'
-                      : 'border-gray-200 hover:border-gray-300'
+                      ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/30'
+                      : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                   }`}
                 >
                   <div className="text-2xl mb-2">📋</div>
-                  <div className="font-semibold text-gray-900">Planned</div>
-                  <div className="text-sm text-gray-500">Add stories before inviting team</div>
+                  <div className="font-semibold text-gray-900 dark:text-gray-100">Planned</div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">Add stories before inviting team</div>
                 </button>
                 <button
                   type="button"
                   onClick={() => setSessionType('quick')}
                   className={`p-4 rounded-lg border-2 text-left transition-all ${
                     sessionType === 'quick'
-                      ? 'border-primary-500 bg-primary-50'
-                      : 'border-gray-200 hover:border-gray-300'
+                      ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/30'
+                      : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                   }`}
                 >
                   <div className="text-2xl mb-2">⚡</div>
-                  <div className="font-semibold text-gray-900">Quick</div>
-                  <div className="text-sm text-gray-500">Start now, add stories on the fly</div>
+                  <div className="font-semibold text-gray-900 dark:text-gray-100">Quick</div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">Start now, add stories on the fly</div>
                 </button>
               </div>
             </div>

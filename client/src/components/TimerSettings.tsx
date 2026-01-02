@@ -26,7 +26,7 @@ export function TimerSettings({ currentDuration, onSetTimer }: TimerSettingsProp
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-sm font-medium text-gray-700 transition-colors"
+        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors"
       >
         <span>⏱️</span>
         <span>Timer: {getCurrentLabel()}</span>
@@ -42,7 +42,7 @@ export function TimerSettings({ currentDuration, onSetTimer }: TimerSettingsProp
           />
           
           {/* Dropdown */}
-          <div className="absolute right-0 mt-2 w-32 bg-white rounded-lg shadow-lg border border-gray-200 z-20 py-1">
+          <div className="absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-20 py-1">
             {timerOptions.map((option) => (
               <button
                 key={option.label}
@@ -50,10 +50,10 @@ export function TimerSettings({ currentDuration, onSetTimer }: TimerSettingsProp
                   onSetTimer(option.value);
                   setIsOpen(false);
                 }}
-                className={`w-full px-3 py-2 text-left text-sm hover:bg-gray-100 transition-colors ${
+                className={`w-full px-3 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
                   currentDuration === option.value
-                    ? 'bg-primary-50 text-primary-700 font-medium'
-                    : 'text-gray-700'
+                    ? 'bg-primary-50 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 font-medium'
+                    : 'text-gray-700 dark:text-gray-300'
                 }`}
               >
                 {option.label}

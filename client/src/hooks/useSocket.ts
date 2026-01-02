@@ -141,6 +141,27 @@ export function useSocket() {
     });
   }, [socket, session]);
 
+  const removeParticipant = useCallback((participantId: string) => {
+    if (!socket || !session) {
+      console.error('[useSocket] Cannot remove participant: socket not connected or no session');
+      return;
+    }
+    socket.emit(CLIENT_EVENTS.REMOVE_PARTICIPANT, {
+      participantId,
+    });
+  }, [socket, session]);
+
+  const updateStory = useCallback((storyId: string, updates: { title?: string; description?: string }) => {
+    if (!socket || !session) {
+      console.error('[useSocket] Cannot update story: socket not connected or no session');
+      return;
+    }
+    socket.emit(CLIENT_EVENTS.UPDATE_STORY, {
+      storyId,
+      ...updates,
+    });
+  }, [socket, session]);
+
   return {
     socket,
     isConnected,
@@ -155,5 +176,7 @@ export function useSocket() {
     setFinalPoints,
     setTimer,
     endSession,
+    removeParticipant,
+    updateStory,
   };
 }

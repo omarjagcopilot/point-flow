@@ -43,7 +43,12 @@
 
 @layer base {
   body {
-    @apply bg-gray-50 text-gray-900 antialiased dark:bg-gray-900 dark:text-gray-100;
+    @apply bg-gray-50 text-gray-900 antialiased dark:bg-gray-950 dark:text-gray-100;
+  }
+
+  /* Improved dark mode backgrounds */
+  .dark {
+    color-scheme: dark;
   }
 }
 
@@ -73,7 +78,7 @@
   }
 
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6 dark:bg-gray-800 dark:border-gray-700;
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6 dark:bg-gray-900 dark:border-gray-800 dark:shadow-gray-950/50;
   }
 
   .vote-card {
@@ -89,11 +94,11 @@
   }
 
   .participant-card {
-    @apply flex flex-col items-center p-3 rounded-lg bg-gray-50 border border-gray-200 dark:bg-gray-700 dark:border-gray-600;
+    @apply flex flex-col items-center p-3 rounded-lg bg-gray-50 border border-gray-200 dark:bg-gray-800 dark:border-gray-700;
   }
 
   .story-item {
-    @apply flex items-center justify-between p-3 rounded-lg bg-gray-50 border border-gray-200 hover:bg-gray-100 transition-colors dark:bg-gray-700 dark:border-gray-600 dark:hover:bg-gray-600;
+    @apply flex items-center justify-between p-3 rounded-lg bg-gray-50 border border-gray-200 hover:bg-gray-100 transition-colors dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700;
   }
 
   .status-badge {
@@ -101,7 +106,7 @@
   }
 
   .status-pending {
-    @apply status-badge bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300;
+    @apply status-badge bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400;
   }
 
   .status-voting {
@@ -124,7 +129,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100 rounded-full dark:bg-gray-800;
+  @apply bg-gray-100 rounded-full dark:bg-gray-900;
 }
 
 ::-webkit-scrollbar-thumb {

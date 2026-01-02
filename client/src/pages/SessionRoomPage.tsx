@@ -21,7 +21,8 @@ export function SessionRoomPage() {
     setFinalPoints, 
     addStory,
     setTimer,
-    endSession 
+    endSession,
+    removeParticipant,
   } = useSocket();
   
   const { 
@@ -145,13 +146,13 @@ export function SessionRoomPage() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-4 py-3">
+      <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 py-3">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Logo size="sm" />
             <div>
-              <h1 className="font-semibold text-gray-900">{session.name}</h1>
-              <div className="flex items-center gap-2 text-sm text-gray-500">
+              <h1 className="font-semibold text-gray-900 dark:text-gray-100">{session.name}</h1>
+              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                 <span className="font-mono font-bold">{session.code}</span>
                 <CopyButton text={inviteLink} label="invite link" />
               </div>
@@ -173,8 +174,8 @@ export function SessionRoomPage() {
                 End Session
               </button>
             )}
-            <div className="text-sm text-gray-500">
-              Joined as: <span className="font-medium text-gray-900">
+            <div className="text-sm text-gray-500 dark:text-gray-400">
+              Joined as: <span className="font-medium text-gray-900 dark:text-gray-100">
                 {session.participants.find(p => p.id === participantId)?.name}
               </span>
             </div>
@@ -189,7 +190,7 @@ export function SessionRoomPage() {
           {/* Current Story Card */}
           <div className="card">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-900">Current Story</h2>
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Current Story</h2>
               {session.timerEndTime && currentStory?.status === 'voting' && (
                 <VotingTimer endTime={session.timerEndTime} />
               )}
@@ -197,10 +198,10 @@ export function SessionRoomPage() {
 
             {currentStory ? (
               <div>
-                <div className="p-4 bg-gray-50 rounded-lg mb-4">
-                  <h3 className="text-xl font-medium text-gray-900">{currentStory.title}</h3>
+                <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg mb-4">
+                  <h3 className="text-xl font-medium text-gray-900 dark:text-gray-100">{currentStory.title}</h3>
                   {currentStory.description && (
-                    <p className="text-gray-600 mt-1">{currentStory.description}</p>
+                    <p className="text-gray-600 dark:text-gray-400 mt-1">{currentStory.description}</p>
                   )}
                   <div className="mt-2">
                     {currentStory.status === 'voting' && (
@@ -214,7 +215,7 @@ export function SessionRoomPage() {
 
                 {/* Participants' Vote Status */}
                 <div className="mb-4">
-                  <div className="text-sm text-gray-600 mb-2">
+                  <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                     Votes ({currentStory.votes.length}/{session.participants.filter(p => p.isConnected).length} voted)
                   </div>
                   <ParticipantsList
@@ -222,19 +223,25 @@ export function SessionRoomPage() {
                     votes={currentStory.votes}
                     isRevealed={currentStory.status === 'revealed'}
                     currentUserId={participantId || ''}
+                    isScrumMaster={isScrum}
+                    onRemoveParticipant={(id) => {
+                      if (confirm('Are you sure you want to remove this participant from the session?')) {
+                        removeParticipant(id);
+                      }
+                    }}
                   />
                 </div>
 
                 {/* Vote Statistics (after reveal) */}
                 {currentStory.status === 'revealed' && voteStats && (
-                  <div className="p-3 bg-blue-50 rounded-lg mb-4 flex items-center justify-center gap-6 text-sm">
+                  <div className="p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg mb-4 flex items-center justify-center gap-6 text-sm">
                     <div>
-                      <span className="text-blue-600 font-medium">Average:</span>{' '}
-                      <span className="font-bold">{voteStats.average}</span>
+                      <span className="text-blue-600 dark:text-blue-400 font-medium">Average:</span>{' '}
+                      <span className="font-bold dark:text-gray-100">{voteStats.average}</span>
                     </div>
                     <div>
-                      <span className="text-blue-600 font-medium">Most common:</span>{' '}
-                      <span className="font-bold">{voteStats.mode}</span>
+                      <span className="text-blue-600 dark:text-blue-400 font-medium">Most common:</span>{' '}
+                      <span className="font-bold dark:text-gray-100">{voteStats.mode}</span>
                     </div>
                   </div>
                 )}
@@ -252,13 +259,13 @@ export function SessionRoomPage() {
                 {/* Final Points Selection (Scrum Master only, after reveal) */}
                 {isScrum && currentStory.status === 'revealed' && (
                   <div className="mt-4">
-                    <div className="text-sm font-medium text-gray-700 mb-2">Set Final Points:</div>
+                    <div className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Set Final Points:</div>
                     <div className="flex flex-wrap gap-2">
                       {pointScale.filter(v => v !== '?' && v !== '☕').map((value) => (
                         <button
                           key={value}
                           onClick={() => handleSetFinalPoints(value)}
-                          className="px-4 py-2 rounded-lg border-2 border-gray-200 hover:border-green-500 hover:bg-green-50 font-medium transition-all"
+                          className="px-4 py-2 rounded-lg border-2 border-gray-200 dark:border-gray-700 hover:border-green-500 hover:bg-green-50 dark:hover:bg-green-900/30 font-medium transition-all dark:text-gray-100"
                         >
                           {value}
                         </button>
@@ -268,7 +275,7 @@ export function SessionRoomPage() {
                 )}
               </div>
             ) : (
-              <div className="text-center py-12 text-gray-500">
+              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
                 <div className="text-4xl mb-3">🎯</div>
                 <p className="font-medium">No story selected</p>
                 <p className="text-sm mt-1">
@@ -294,11 +301,11 @@ export function SessionRoomPage() {
         <div className="space-y-4">
           <div className="card">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-900">Stories</h2>
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Stories</h2>
               {isScrum && (
                 <button
                   onClick={() => setShowAddStory(!showAddStory)}
-                  className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+                  className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 text-sm font-medium"
                 >
                   + Add Story
                 </button>
@@ -330,7 +337,7 @@ export function SessionRoomPage() {
 
           {/* Online Participants */}
           <div className="card">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
               Participants ({session.participants.filter(p => p.isConnected).length})
             </h2>
             <div className="space-y-2">
@@ -338,18 +345,18 @@ export function SessionRoomPage() {
                 <div
                   key={p.id}
                   className={`flex items-center gap-2 text-sm ${
-                    p.isConnected ? 'text-gray-900' : 'text-gray-400'
+                    p.isConnected ? 'text-gray-900 dark:text-gray-100' : 'text-gray-400 dark:text-gray-500'
                   }`}
                 >
                   <span className={`w-2 h-2 rounded-full ${
-                    p.isConnected ? 'bg-green-500' : 'bg-gray-300'
+                    p.isConnected ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'
                   }`} />
                   <span>{p.name}</span>
                   {p.role === 'scrum_master' && (
-                    <span className="text-xs bg-primary-100 text-primary-700 px-1.5 py-0.5 rounded">SM</span>
+                    <span className="text-xs bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 px-1.5 py-0.5 rounded">SM</span>
                   )}
                   {p.id === participantId && (
-                    <span className="text-xs text-gray-400">(you)</span>
+                    <span className="text-xs text-gray-400 dark:text-gray-500">(you)</span>
                   )}
                 </div>
               ))}

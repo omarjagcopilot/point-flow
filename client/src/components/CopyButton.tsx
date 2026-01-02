@@ -33,7 +33,7 @@ export function CopyButton({ text, label = 'text', variant = 'icon' }: CopyButto
   return (
     <button
       onClick={handleCopy}
-      className="text-gray-400 hover:text-gray-600 transition-colors"
+      className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors"
       title={`Copy ${label}`}
     >
       {copied ? '✓' : '📋'}

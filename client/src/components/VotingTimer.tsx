@@ -29,10 +29,10 @@ export function VotingTimer({ endTime }: VotingTimerProps) {
   return (
     <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm font-mono font-medium ${
       isExpired
-        ? 'bg-red-100 text-red-700'
+        ? 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300'
         : isLow
-        ? 'bg-amber-100 text-amber-700 animate-pulse'
-        : 'bg-gray-100 text-gray-700'
+        ? 'bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 animate-pulse'
+        : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
     }`}>
       <span>⏱️</span>
       <span>

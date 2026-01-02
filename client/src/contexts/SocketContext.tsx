@@ -9,8 +9,10 @@ import {
   ParticipantJoinedPayload,
   ParticipantLeftPayload,
   ParticipantReconnectedPayload,
+  ParticipantRemovedPayload,
   StoryAddedPayload,
   StoryRemovedPayload,
+  StoryUpdatedPayload,
   StoriesReorderedPayload,
   VotingStartedPayload,
   VoteReceivedPayload,
@@ -99,6 +101,21 @@ export function SocketProvider({ children }: { children: ReactNode }) {
       useSessionStore.getState().removeParticipant(payload.participantId);
     });
 
+    newSocket.on(SERVER_EVENTS.PARTICIPANT_REMOVED, (payload: ParticipantRemovedPayload) => {
+      const currentParticipantId = useSessionStore.getState().participantId;
+      
+      // If we are the removed participant, redirect and clear session
+      if (payload.participantId === currentParticipantId) {
+        useSessionStore.getState().setError('You have been removed from the session by the Scrum Master.');
+        useSessionStore.getState().reset();
+        window.location.href = '/';
+        return;
+      }
+      
+      // Otherwise just remove the participant from the list
+      useSessionStore.getState().removeParticipant(payload.participantId);
+    });
+
     newSocket.on(SERVER_EVENTS.PARTICIPANT_RECONNECTED, (payload: ParticipantReconnectedPayload) => {
       useSessionStore.getState().setParticipantConnected(payload.participantId, true);
     });
@@ -110,6 +127,10 @@ export function SocketProvider({ children }: { children: ReactNode }) {
 
     newSocket.on(SERVER_EVENTS.STORY_REMOVED, (payload: StoryRemovedPayload) => {
       useSessionStore.getState().removeStory(payload.storyId);
+    });
+
+    newSocket.on(SERVER_EVENTS.STORY_UPDATED, (payload: StoryUpdatedPayload) => {
+      useSessionStore.getState().updateStory(payload.story);
     });
 
     newSocket.on(SERVER_EVENTS.STORIES_REORDERED, (payload: StoriesReorderedPayload) => {

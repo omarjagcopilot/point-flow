@@ -28,6 +28,7 @@ interface SessionState {
   // Story updates
   addStory: (story: Story) => void;
   removeStory: (storyId: string) => void;
+  updateStory: (story: Story) => void;
   reorderStories: (storyIds: string[]) => void;
   setActiveStory: (storyId: string | null) => void;
   setStoryStatus: (storyId: string, status: Story['status']) => void;
@@ -154,6 +155,19 @@ export const useSessionStore = create<SessionState>()(
             session: {
               ...state.session,
               stories: reordered,
+            },
+          };
+        }),
+
+      updateStory: (story: Story) =>
+        set((state) => {
+          if (!state.session) return state;
+          return {
+            session: {
+              ...state.session,
+              stories: state.session.stories.map((s) =>
+                s.id === story.id ? { ...s, ...story } : s
+              ),
             },
           };
         }),
