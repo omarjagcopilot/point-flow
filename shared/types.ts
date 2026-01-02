@@ -111,6 +111,16 @@ export interface ReorderStoriesPayload {
   storyIds: string[];
 }
 
+export interface RemoveParticipantPayload {
+  participantId: string;
+}
+
+export interface UpdateStoryPayload {
+  storyId: string;
+  title?: string;
+  description?: string;
+}
+
 // Server -> Client Events
 export interface SessionCreatedPayload {
   session: Session;
@@ -128,6 +138,15 @@ export interface ParticipantJoinedPayload {
 
 export interface ParticipantLeftPayload {
   participantId: string;
+}
+
+export interface ParticipantRemovedPayload {
+  participantId: string;
+  removedBy: string;
+}
+
+export interface StoryUpdatedPayload {
+  story: Story;
 }
 
 export interface ParticipantReconnectedPayload {
@@ -203,6 +222,7 @@ export const CLIENT_EVENTS = {
   JOIN_SESSION: 'join_session',
   ADD_STORY: 'add_story',
   REMOVE_STORY: 'remove_story',
+  UPDATE_STORY: 'update_story',
   REORDER_STORIES: 'reorder_stories',
   START_VOTING: 'start_voting',
   SUBMIT_VOTE: 'submit_vote',
@@ -211,6 +231,7 @@ export const CLIENT_EVENTS = {
   SET_TIMER: 'set_timer',
   END_SESSION: 'end_session',
   RECONNECT: 'reconnect',
+  REMOVE_PARTICIPANT: 'remove_participant',
 } as const;
 
 export const SERVER_EVENTS = {
@@ -219,8 +240,10 @@ export const SERVER_EVENTS = {
   PARTICIPANT_JOINED: 'participant_joined',
   PARTICIPANT_LEFT: 'participant_left',
   PARTICIPANT_RECONNECTED: 'participant_reconnected',
+  PARTICIPANT_REMOVED: 'participant_removed',
   STORY_ADDED: 'story_added',
   STORY_REMOVED: 'story_removed',
+  STORY_UPDATED: 'story_updated',
   STORIES_REORDERED: 'stories_reordered',
   VOTING_STARTED: 'voting_started',
   VOTE_RECEIVED: 'vote_received',

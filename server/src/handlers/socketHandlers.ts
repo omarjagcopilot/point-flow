@@ -13,6 +13,8 @@ import {
   RevealVotesPayload,
   SetFinalPointsPayload,
   SetTimerPayload,
+  RemoveParticipantPayload,
+  UpdateStoryPayload,
 } from '../../../shared/types.ts';
 
 // Map socket ID to session/participant info
@@ -175,6 +177,25 @@ export function setupSocketHandlers(io: Server) {
     });
 
     // ========================================
+    // UPDATE STORY
+    // ========================================
+    socket.on(CLIENT_EVENTS.UPDATE_STORY, (payload: UpdateStoryPayload) => {
+      const meta = socketMeta.get(socket.id);
+      if (!meta) return;
+
+      // Only Scrum Master can update stories
+      const session = SessionStore.getSession(meta.sessionId);
+      if (!session || session.scrumMasterId !== meta.participantId) return;
+
+      const { storyId, title, description } = payload;
+      const story = SessionStore.updateStory(meta.sessionId, storyId, { title, description });
+
+      if (story) {
+        io.to(meta.sessionId).emit(SERVER_EVENTS.STORY_UPDATED, { story });
+      }
+    });
+
+    // ========================================
     // REMOVE STORY
     // ========================================
     socket.on(CLIENT_EVENTS.REMOVE_STORY, (payload: RemoveStoryPayload) => {
@@ -187,6 +208,30 @@ export function setupSocketHandlers(io: Server) {
 
       if (SessionStore.removeStory(meta.sessionId, payload.storyId)) {
         io.to(meta.sessionId).emit(SERVER_EVENTS.STORY_REMOVED, { storyId: payload.storyId });
+      }
+    });
+
+    // ========================================
+    // REMOVE PARTICIPANT
+    // ========================================
+    socket.on(CLIENT_EVENTS.REMOVE_PARTICIPANT, (payload: RemoveParticipantPayload) => {
+      const meta = socketMeta.get(socket.id);
+      if (!meta) return;
+
+      // Only Scrum Master can remove participants
+      const session = SessionStore.getSession(meta.sessionId);
+      if (!session || session.scrumMasterId !== meta.participantId) return;
+
+      const participant = SessionStore.getParticipant(meta.sessionId, payload.participantId);
+      if (!participant) return;
+
+      if (SessionStore.removeParticipant(meta.sessionId, payload.participantId)) {
+        io.to(meta.sessionId).emit(SERVER_EVENTS.PARTICIPANT_REMOVED, {
+          participantId: payload.participantId,
+          removedBy: meta.participantId,
+        });
+
+        console.log(`[Socket] Scrum master removed ${participant.name} from session ${session.code}`);
       }
     });
 

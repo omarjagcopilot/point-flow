@@ -6,7 +6,8 @@
   "main": "dist/src/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "build": "tsc && npm run fix-imports",
+    "fix-imports": "node --eval \"const{readdirSync,readFileSync,writeFileSync,statSync}=require('fs'),{join}=require('path');function fix(d){readdirSync(d).forEach(f=>{const p=join(d,f);statSync(p).isDirectory()?fix(p):f.endsWith('.js')&&writeFileSync(p,readFileSync(p,'utf8').replace(/from\\s*['\\\"](.+)\\.ts['\\\"]/g,\\\"from '\\$1.js'\\\"))})}fix('./dist')\"",
     "start": "node dist/src/index.js"
   },
   "dependencies": {

@@ -158,6 +158,43 @@ export const SessionStore = {
     return session.participants.find((p) => p.id === participantId) || null;
   },
 
+  // Remove participant from session (scrum master only)
+  removeParticipant(sessionId: string, participantId: string): boolean {
+    const session = sessions.get(sessionId);
+    if (!session) return false;
+
+    // Can't remove the scrum master
+    if (participantId === session.scrumMasterId) return false;
+
+    const index = session.participants.findIndex((p) => p.id === participantId);
+    if (index === -1) return false;
+
+    const participant = session.participants[index];
+    session.participants.splice(index, 1);
+
+    // Remove their votes from all stories
+    session.stories.forEach((story) => {
+      story.votes = story.votes.filter((v) => v.participantId !== participantId);
+    });
+
+    console.log(`[SessionStore] Removed ${participant.name} from session ${session.code}`);
+    return true;
+  },
+
+  // Update story details
+  updateStory(sessionId: string, storyId: string, updates: { title?: string; description?: string }): Story | null {
+    const session = sessions.get(sessionId);
+    if (!session) return null;
+
+    const story = session.stories.find((s) => s.id === storyId);
+    if (!story) return null;
+
+    if (updates.title !== undefined) story.title = updates.title;
+    if (updates.description !== undefined) story.description = updates.description;
+
+    return story;
+  },
+
   // Add story to session
   addStory(sessionId: string, title: string, description?: string): Story | null {
     const session = sessions.get(sessionId);
