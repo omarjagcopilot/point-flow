@@ -1,5 +1,5 @@
 import { Server, Socket } from 'socket.io';
-import { SessionStore } from '../store/sessionStore.ts';
+import { SessionStore } from '../store/sessionStore.js';
 import {
   CLIENT_EVENTS,
   SERVER_EVENTS,
@@ -15,7 +15,7 @@ import {
   SetTimerPayload,
   RemoveParticipantPayload,
   UpdateStoryPayload,
-} from '../../../shared/types.ts';
+} from '../../../shared/types.js';
 
 // Map socket ID to session/participant info
 interface SocketMeta {

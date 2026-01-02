@@ -2,7 +2,7 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import cors from 'cors';
-import { setupSocketHandlers } from './handlers/socketHandlers.ts';
+import { setupSocketHandlers } from './handlers/socketHandlers.js';
 
 const app = express();
 const httpServer = createServer(app);
