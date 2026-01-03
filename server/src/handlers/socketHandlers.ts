@@ -15,7 +15,7 @@ import {
   SetTimerPayload,
   RemoveParticipantPayload,
   UpdateStoryPayload,
-} from '../../../shared/types.js';
+} from '../shared/types.js';
 
 // Map socket ID to session/participant info
 interface SocketMeta {

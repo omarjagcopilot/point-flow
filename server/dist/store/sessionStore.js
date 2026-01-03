@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SessionStore = void 0;
-const nanoid_1 = require("nanoid");
+import { nanoid } from 'nanoid';
 // In-memory session store
 const sessions = new Map();
 const codeToSessionId = new Map();
@@ -31,11 +28,11 @@ setInterval(() => {
         }
     }
 }, 60 * 1000); // Check every minute
-exports.SessionStore = {
+export const SessionStore = {
     // Create a new session
     createSession(sessionName, scrumMasterName, pointScale, sessionType) {
-        const sessionId = (0, nanoid_1.nanoid)();
-        const participantId = (0, nanoid_1.nanoid)();
+        const sessionId = nanoid();
+        const participantId = nanoid();
         const code = generateSessionCode();
         const now = new Date().toISOString();
         const scrumMaster = {
@@ -64,7 +61,7 @@ exports.SessionStore = {
         // For quick sessions, create a default story
         if (sessionType === 'quick') {
             const defaultStory = {
-                id: (0, nanoid_1.nanoid)(),
+                id: nanoid(),
                 title: 'Story 1',
                 status: 'voting',
                 votes: [],
@@ -95,7 +92,7 @@ exports.SessionStore = {
         const session = sessions.get(sessionId);
         if (!session)
             return null;
-        const participantId = (0, nanoid_1.nanoid)();
+        const participantId = nanoid();
         const participant = {
             id: participantId,
             name,
@@ -125,13 +122,47 @@ exports.SessionStore = {
             return null;
         return session.participants.find((p) => p.id === participantId) || null;
     },
+    // Remove participant from session (scrum master only)
+    removeParticipant(sessionId, participantId) {
+        const session = sessions.get(sessionId);
+        if (!session)
+            return false;
+        // Can't remove the scrum master
+        if (participantId === session.scrumMasterId)
+            return false;
+        const index = session.participants.findIndex((p) => p.id === participantId);
+        if (index === -1)
+            return false;
+        const participant = session.participants[index];
+        session.participants.splice(index, 1);
+        // Remove their votes from all stories
+        session.stories.forEach((story) => {
+            story.votes = story.votes.filter((v) => v.participantId !== participantId);
+        });
+        console.log(`[SessionStore] Removed ${participant.name} from session ${session.code}`);
+        return true;
+    },
+    // Update story details
+    updateStory(sessionId, storyId, updates) {
+        const session = sessions.get(sessionId);
+        if (!session)
+            return null;
+        const story = session.stories.find((s) => s.id === storyId);
+        if (!story)
+            return null;
+        if (updates.title !== undefined)
+            story.title = updates.title;
+        if (updates.description !== undefined)
+            story.description = updates.description;
+        return story;
+    },
     // Add story to session
     addStory(sessionId, title, description) {
         const session = sessions.get(sessionId);
         if (!session)
             return null;
         const story = {
-            id: (0, nanoid_1.nanoid)(),
+            id: nanoid(),
             title,
             description,
             status: 'pending',

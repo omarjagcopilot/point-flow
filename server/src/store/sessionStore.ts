@@ -6,7 +6,7 @@ import {
   PointScale,
   SessionType,
   SessionSummary,
-} from '../../../shared/types.js';
+} from '../shared/types.js';
 import { nanoid } from 'nanoid';
 
 // In-memory session store
