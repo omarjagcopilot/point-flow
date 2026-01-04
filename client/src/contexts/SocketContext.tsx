@@ -23,7 +23,10 @@ import {
   ErrorPayload,
 } from '@shared/types';
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:3001';
+// In production (Railway), frontend and backend are on same origin
+// In development, use localhost:3001
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 
+  (import.meta.env.PROD ? window.location.origin : 'http://localhost:3001');
 
 interface SocketContextType {
   socket: Socket | null;
