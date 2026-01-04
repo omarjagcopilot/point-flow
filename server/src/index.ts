@@ -48,20 +48,33 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Socket.IO status endpoint
+app.get('/socket-status', (_req, res) => {
+  res.json({ 
+    status: 'ok', 
+    engine: 'socket.io',
+    connections: io.engine.clientsCount 
+  });
+});
+
 // Serve React app for all other routes (SPA support)
-app.get('*', (_req, res) => {
+// Exclude socket.io path
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/socket.io')) {
+    return next();
+  }
   res.sendFile(path.join(clientDistPath, 'index.html'));
 });
 
 // Start server
 const PORT = process.env.PORT || 3001;
-httpServer.listen(PORT, () => {
+httpServer.listen(PORT, '0.0.0.0', () => {
   console.log(`
   ╔═══════════════════════════════════════════════════╗
   ║                                                   ║
   ║   🎯  POINT FLOW SERVER                          ║
   ║                                                   ║
-  ║   Server running on http://localhost:${PORT}        ║
+  ║   Server running on port ${PORT}                    ║
   ║   Waiting for connections...                      ║
   ║                                                   ║
   ╚═══════════════════════════════════════════════════╝
