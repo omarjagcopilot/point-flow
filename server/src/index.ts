@@ -12,28 +12,18 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const httpServer = createServer(app);
 
-// CORS configuration - more permissive for same-origin in production
-const allowedOrigins = [
-  'http://localhost:5173',
-  'http://localhost:3001',
-  'https://pointflowio.vercel.app',
-  process.env.CLIENT_URL,
-].filter(Boolean) as string[];
-
-console.log('Allowed origins:', allowedOrigins);
+// CORS configuration - allow same-origin in production
+const isProduction = process.env.NODE_ENV === 'production' || process.env.RAILWAY_ENVIRONMENT;
 
 const corsOptions = {
-  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-    // Allow requests with no origin (same-origin, mobile apps, curl, etc.)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.some(allowed => origin.startsWith(allowed.replace(/\/$/, '')))) {
-      return callback(null, true);
-    }
-    console.log('CORS blocked origin:', origin);
-    callback(new Error('Not allowed by CORS'));
-  },
+  origin: isProduction ? true : [
+    'http://localhost:5173',
+    'http://localhost:3001',
+  ],
   credentials: true,
 };
+
+console.log('CORS mode:', isProduction ? 'production (allow all)' : 'development');
 
 app.use(cors(corsOptions));
 app.use(express.json());
