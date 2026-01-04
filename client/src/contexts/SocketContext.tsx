@@ -44,12 +44,14 @@ export function SocketProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Socket initialization
+    console.log('[Socket] Connecting to:', SOCKET_URL);
 
     const newSocket = io(SOCKET_URL, {
-      transports: ['websocket', 'polling'],
+      transports: ['polling', 'websocket'], // Try polling first
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
+      upgrade: true, // Allow upgrade to websocket after polling works
     });
 
     setSocket(newSocket);
