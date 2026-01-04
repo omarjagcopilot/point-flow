@@ -28,6 +28,8 @@ import {
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 
   (import.meta.env.PROD ? window.location.origin : 'http://localhost:3001');
 
+console.log('[Socket] Build v2 - URL:', SOCKET_URL, 'isProd:', import.meta.env.PROD);
+
 interface SocketContextType {
   socket: Socket | null;
   isConnected: boolean;
