@@ -27,21 +27,29 @@ console.log('Port:', process.env.PORT || 3001);
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// Serve static files from the React app build
-const clientDistPath = path.join(__dirname, '../../client/dist');
-console.log('Static files path:', clientDistPath);
-app.use(express.static(clientDistPath));
-
-// Socket.IO setup with transports
+// Socket.IO setup with transports - BEFORE static files
 const io = new Server(httpServer, {
   cors: corsOptions,
   pingTimeout: 60000,
   pingInterval: 25000,
-  transports: ['websocket', 'polling'], // Allow both transports
+  transports: ['polling', 'websocket'], // Polling first for better compatibility
+  allowEIO3: true, // Allow Engine.IO v3 clients
 });
 
 // Setup socket event handlers
 setupSocketHandlers(io);
+
+// Serve static files from the React app build AFTER socket.io is set up
+const clientDistPath = path.join(__dirname, '../../client/dist');
+console.log('Static files path:', clientDistPath);
+
+// Don't serve static files for socket.io paths
+app.use((req, res, next) => {
+  if (req.path.startsWith('/socket.io')) {
+    return next();
+  }
+  express.static(clientDistPath)(req, res, next);
+});
 
 // Health check endpoint
 app.get('/health', (_req, res) => {
