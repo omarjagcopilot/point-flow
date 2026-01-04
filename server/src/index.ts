@@ -16,27 +16,28 @@ const httpServer = createServer(app);
 const isProduction = process.env.NODE_ENV === 'production' || process.env.RAILWAY_ENVIRONMENT;
 
 const corsOptions = {
-  origin: isProduction ? true : [
-    'http://localhost:5173',
-    'http://localhost:3001',
-  ],
+  origin: true, // Allow all origins - same server serves frontend
   credentials: true,
+  methods: ['GET', 'POST'],
 };
 
-console.log('CORS mode:', isProduction ? 'production (allow all)' : 'development');
+console.log('Environment:', isProduction ? 'production' : 'development');
+console.log('Port:', process.env.PORT || 3001);
 
 app.use(cors(corsOptions));
 app.use(express.json());
 
 // Serve static files from the React app build
 const clientDistPath = path.join(__dirname, '../../client/dist');
+console.log('Static files path:', clientDistPath);
 app.use(express.static(clientDistPath));
 
-// Socket.IO setup
+// Socket.IO setup with transports
 const io = new Server(httpServer, {
   cors: corsOptions,
   pingTimeout: 60000,
   pingInterval: 25000,
+  transports: ['websocket', 'polling'], // Allow both transports
 });
 
 // Setup socket event handlers
